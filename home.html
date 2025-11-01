@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POI Taxi</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Poppins", sans-serif;
+      background: url("https://raw.githubusercontent.com/masajie78car-boop/background-/main/bg-picsay%20(1)-picsay.png") no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .login-button {
+      background-color: rgba(0, 123, 255, 0.9);
+      color: white;
+      border: none;
+      font-size: 1.5em;
+      padding: 15px 40px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: 0.3s;
+      animation: pulse 2s infinite;
+      margin-bottom: 40px;
+    }
+    .login-button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(0,123,255,0.6); }
+      70% { box-shadow: 0 0 0 20px rgba(0,123,255,0); }
+      100% { box-shadow: 0 0 0 0 rgba(0,123,255,0); }
+    }
+  </style>
+</head>
+<body>
+  <button class="login-button" onclick="goLogin()">LOGIN</button>
+  <script>
+    function goLogin() { window.location.href = "login.html"; }
+  </script>
+</body>
+</html>
