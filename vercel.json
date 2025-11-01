@@ -2,11 +2,16 @@
   "version": 2,
   "builds": [
     { "src": "index.js", "use": "@vercel/node" },
-    { "src": "*.html", "use": "@vercel/static" }
+    { "src": "home.html", "use": "@vercel/static" },
+    { "src": "login.html", "use": "@vercel/static" },
+    { "src": "panel_admin.html", "use": "@vercel/static" },
+    { "src": "panel_admin_jatinegara.html", "use": "@vercel/static" }
   ],
   "routes": [
     { "src": "/webhook", "dest": "/index.js" },
-    { "src": "/(.*)", "dest": "/$1" }
+    { "src": "/login.html", "dest": "/login.html" },
+    { "src": "/panel_admin.html", "dest": "/panel_admin.html" },
+    { "src": "/panel_admin_jatinegara.html", "dest": "/panel_admin_jatinegara.html" },
+    { "src": "/(.*)", "dest": "/home.html" }
   ]
 }
-
