@@ -3,23 +3,128 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Panel Admin - Stasiun Jatinegara</title>
-<style>
-body{margin:0;font-family:"Poppins",sans-serif;background:#f5f7fb;color:#333;}
-header{background:#007bff;color:white;padding:16px;text-align:center;box-shadow:0 3px 8px rgba(0,0,0,0.1);}
-main{max-width:960px;margin:24px auto;padding:16px;}
-.section{background:#fff;padding:16px;border-radius:10px;box-shadow:0 3px 12px rgba(0,0,0,0.05);margin-bottom:24px;}
-h2{margin-top:0;color:#007bff;}
-table{width:100%;border-collapse:collapse;margin-top:10px;}
-th,td{padding:8px;border:1px solid #e5e8ee;text-align:center;}
-th{background:#f1f5fb;color:#444;}
-button.action{padding:6px 10px;border:none;border-radius:6px;color:white;cursor:pointer;font-size:14px;}
-.btn-selesai{background:#28a745;}
-.btn-setujui{background:#17a2b8;}
-.empty{color:#888;font-style:italic;}
-.logout{position:fixed;bottom:40px;left:50%;transform:translateX(-50%);background-color:rgba(0,123,255,0.95);color:white;border:none;font-size:1.2em;padding:16px 50px;border-radius:50px;cursor:pointer;box-shadow:0 4px 10px rgba(0,0,0,0.3);transition:0.3s;animation:pulse 2s infinite;z-index:999;}
-@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(0,123,255,0.6);}70%{box-shadow:0 0 0 20px rgba(0,123,255,0);}100%{box-shadow:0 0 0 0 rgba(0,123,255,0);}}
-.logout:hover{background-color:#0056b3;transform:translateX(-50%) scale(1.05);}
+<title>Panel Admin - Stasiun Jatinegara</title><style>
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background: #f5f7fb;
+  color: #333;
+}
+
+/* Header lebih kecil dan rapat */
+header {
+  background: #007bff;
+  color: white;
+  padding: 10px 0; /* semula 16px */
+  text-align: center;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 6px; /* biar panel langsung nempel */
+}
+
+header h1 {
+  margin: 0;
+  font-size: 18px; /* semula besar, dikurangi */
+  font-weight: 600;
+}
+
+/* Area utama lebih rapat */
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* Panel antrian & buffer lebih menempel */
+.section {
+  background: #fff;
+  padding: 12px; /* semula 16px */
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 10px; /* semula 24px */
+}
+
+h2 {
+  margin-top: 0;
+  color: #007bff;
+  font-size: 16px; /* sedikit lebih kecil */
+  font-weight: 600;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 5px;
+}
+
+th, td {
+  padding: 6px;
+  border: 1px solid #e5e8ee;
+  text-align: center;
+  font-size: 13px;
+}
+
+th {
+  background: #f1f5fb;
+  color: #444;
+}
+
+button.action {
+  padding: 6px 8px;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.btn-selesai {
+  background: #28a745;
+}
+
+.btn-setujui {
+  background: #17a2b8;
+}
+
+.empty {
+  color: #888;
+  font-style: italic;
+}
+
+/* Tombol logout tetap di bawah layar */
+.logout {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 123, 255, 0.95);
+  color: white;
+  border: none;
+  font-size: 1em;
+  padding: 12px 40px;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transition: 0.3s;
+  animation: pulse 2s infinite;
+  z-index: 999;
+}
+
+.logout:hover {
+  background-color: #0056b3;
+  transform: translateX(-50%) scale(1.05);
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.6); }
+  70% { box-shadow: 0 0 0 20px rgba(0, 123, 255, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(0, 123, 255, 0); }
+}
+
+@media (max-width: 600px) {
+  header h1 { font-size: 16px; }
+  th, td { font-size: 12px; }
+  .logout { bottom: 20px; font-size: 0.9rem; padding: 10px 35px; }
+}
 </style>
 </head>
 <body>
