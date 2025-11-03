@@ -16,31 +16,37 @@ const firebaseApp = initializeApp(firebaseConfig);
 const db = getDatabase(firebaseApp);
 
 // ==== Verifikasi Webhook Meta ====
-app.get("/api/webhook", (req, res) => {
+app.get("/webhook", (req, res) => {
   const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
   const challenge = req.query["hub.challenge"];
 
+  console.log("📩 Webhook verify request:", req.query);
+
   if (mode && token && mode === "subscribe" && token === VERIFY_TOKEN) {
-    console.log("✅ Webhook verified");
+    console.log("✅ Webhook verified successfully");
     res.status(200).send(challenge);
   } else {
+    console.warn("❌ Webhook verification failed");
     res.sendStatus(403);
   }
 });
 
 // ==== Terima pesan WhatsApp ====
-app.post("/api/webhook", async (req, res) => {
+app.post("/webhook", async (req, res) => {
   try {
     const change = req.body.entry?.[0]?.changes?.[0]?.value;
     const message = change?.messages?.[0];
-    if (!message) return res.sendStatus(200);
+    if (!message) {
+      console.log("ℹ️ Tidak ada pesan masuk.");
+      return res.sendStatus(200);
+    }
 
     const from = message.from;
     const text = message.text?.body?.trim().toLowerCase() || "";
 
-    console.log("Pesan diterima:", text);
+    console.log("📨 Pesan diterima:", text);
 
     if (text.startsWith("#daftarantrian")) {
       await handleDaftar(from, text, "mall_nusantara", 3);
@@ -50,6 +56,8 @@ app.post("/api/webhook", async (req, res) => {
       await handleUpdate(from, "mall_nusantara");
     } else if (text.startsWith("#updatelist")) {
       await handleUpdate(from, "stasiun_jatinegara");
+    } else {
+      await sendMessage(from, "❓ Perintah tidak dikenal.\nGunakan:\n#daftarantrian / #daftarlist / #updateantrian / #updatelist");
     }
 
     res.sendStatus(200);
@@ -59,7 +67,7 @@ app.post("/api/webhook", async (req, res) => {
   }
 });
 
-// ==== Fungsi pendaftaran ====
+// ==== Fungsi daftar antrian ====
 async function handleDaftar(from, text, lokasi, maxAktif) {
   const parts = text.split(" ");
   const noPolisi = parts[1]?.toUpperCase();
@@ -71,7 +79,7 @@ async function handleDaftar(from, text, lokasi, maxAktif) {
 
   const snap = await get(ref(db, `pangkalan/${lokasi}/antrian`));
   const data = snap.val() || {};
-  const aktif = Object.values(data).filter((d) => d.status === "aktif");
+  const aktif = Object.values(data).filter(d => d.status === "aktif");
 
   const status = aktif.length >= maxAktif ? "buffer" : "aktif";
   await set(ref(db, `pangkalan/${lokasi}/antrian/${noPolisi}`), {
@@ -81,16 +89,15 @@ async function handleDaftar(from, text, lokasi, maxAktif) {
     createdAt: new Date().toISOString(),
   });
 
+  console.log(`✅ ${noPolisi} ditambahkan ke ${lokasi} dengan status ${status}`);
+
   await sendMessage(
     from,
     `✅ Terdaftar di *${lokasi.replace("_", " ")}*\nStatus: *${status.toUpperCase()}*`
   );
 
   if (status === "buffer") {
-    await sendMessage(
-      from,
-      "🕒 Anda masuk daftar *buffer*. Kirim ShareLive agar admin tahu posisi Anda."
-    );
+    await sendMessage(from, "🕒 Anda masuk daftar *buffer*. Kirim ShareLive agar admin tahu posisi Anda.");
   }
 }
 
@@ -109,10 +116,12 @@ async function handleUpdate(from, lokasi) {
   await sendMessage(from, `📋 *Antrian ${lokasi.replace("_", " ")}:*\n${list}`);
 }
 
-// ==== Fungsi kirim pesan WhatsApp ====
+// ==== Kirim pesan WhatsApp ====
 async function sendMessage(to, text) {
   const token = process.env.ACCESS_TOKEN;
   const url = "https://graph.facebook.com/v17.0/252091901004238/messages";
+  console.log(`📤 Mengirim pesan ke ${to}:`, text);
+
   await fetch(url, {
     method: "POST",
     headers: {
@@ -127,5 +136,5 @@ async function sendMessage(to, text) {
   });
 }
 
-// ✅ Penting: ekspor express app, bukan listen()
+// ✅ Penting: ekspor express app
 export default app;
