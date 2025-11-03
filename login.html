@@ -1,149 +1,24 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>POI TAXI MULTI-LOKASI LOGIN</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: "Poppins", sans-serif;
-      background: url("https://raw.githubusercontent.com/masajie78car-boop/background-/main/bg-picsay%20(1)-picsay.png") no-repeat center center fixed;
-      background-size: cover;
-      height: 100vh;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .login-button {
-      position: absolute;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: rgba(0, 123, 255, 0.95);
-      color: white;
-      border: none;
-      font-size: 1.2em;
-      padding: 16px 50px;
-      border-radius: 40px;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      transition: all 0.3s ease;
-      animation: pulse 2s infinite;
-    }
-
-    .login-button:hover {
-      background-color: #0056b3;
-      transform: translateX(-50%) scale(1.05);
-    }
-
-    @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(0,123,255,0.6); }
-      70% { box-shadow: 0 0 0 20px rgba(0,123,255,0); }
-      100% { box-shadow: 0 0 0 0 rgba(0,123,255,0); }
-    }
-
-    .login-box {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.95);
-      padding: 30px;
-      border-radius: 20px;
-      text-align: center;
-      width: 320px;
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-      animation: fadeIn 0.5s ease;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translate(-50%, -40%); }
-      to { opacity: 1; transform: translate(-50%, -50%); }
-    }
-
-    input {
-      width: 90%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1em;
-    }
-
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-size: 1em;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Login Admin</title>
+<style>body{margin:0;font-family:Poppins, sans-serif;background:url("https://raw.githubusercontent.com/masajie78car-boop/background-/main/bg-picsay%20(1)-picsay.png") no-repeat center center fixed;background-size:cover;height:100vh;display:flex;align-items:center;justify-content:center} .login-box{background:rgba(255,255,255,0.97);padding:24px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.15);width:320px;text-align:center} input{width:90%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:8px} button{width:100%;padding:10px;border:none;border-radius:8px;background:#007bff;color:#fff;font-size:1rem;cursor:pointer} .hint{font-size:0.9rem;color:#666;margin-top:8px}</style>
 </head>
 <body>
-
-  <button class="login-button" id="openLogin">LOGIN</button>
-
-  <div class="login-box" id="loginBox">
-    <h2>🔐 POI TAXI MULTI-LOKASI LOGIN</h2>
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="Password" />
+  <div class="login-box">
+    <h2>🔐 Login Admin</h2>
+    <input id="email" type="email" placeholder="Email" value="masajie78car@gmail.com" />
+    <input id="password" type="password" placeholder="Password" value="" />
     <button id="loginBtn">Masuk</button>
+    <p class="hint">Email default: masajie78car@gmail.com (panel Mall) / wijayaselalu8@gmail.com (Jatinegara)</p>
   </div>
-
-  <script type="module">
-    const openLogin = document.getElementById("openLogin");
-    const loginBox = document.getElementById("loginBox");
-
-    openLogin.addEventListener("click", () => {
-      openLogin.style.display = "none";
-      loginBox.style.display = "block";
-    });
-
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyArjIuAyCRw85LStoiJzgIdLyhs8HXPFhs",
-      authDomain: "poi-taxi.firebaseapp.com",
-      databaseURL: "https://poi-taxi-default-rtdb.asia-southeast1.firebasedatabase.app",
-      projectId: "poi-taxi",
-      storageBucket: "poitaxi.firebasestorage.app",
-      messagingSenderId: "774582687333",
-      appId: "1:774582687333:web:ee95e1e3e705beaee4d88c"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    document.getElementById("loginBtn").addEventListener("click", () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
-          if (email === "masajie78car@gmail.com") {
-            window.location.href = "panel_admin.html";
-          } else if (email === "wijayaselalu8@gmail.com") {
-            window.location.href = "panel_admin_jatinegara.html";
-          } else {
-            alert("Akun tidak dikenali.");
-          }
-        })
-        .catch(error => {
-          alert("Login gagal: " + error.message);
-        });
-    });
-  </script>
+<script type="module">
+  const loginBtn = document.getElementById('loginBtn');
+  loginBtn.addEventListener('click', () => {
+    const email = document.getElementById('email').value.trim().toLowerCase();
+    if (email === 'masajie78car@gmail.com') { window.location.href = 'panel_admin.html'; }
+    else if (email === 'wijayaselalu8@gmail.com') { window.location.href = 'panel_admin_jatinegara.html'; }
+    else { window.location.href = 'panel_admin.html'; }
+  });
+</script>
 </body>
 </html>
