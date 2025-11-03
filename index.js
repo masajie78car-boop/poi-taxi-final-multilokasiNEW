@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import fetch from "node-fetch";
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set, get, update } from "firebase/database";
+import { getDatabase, ref, set, get } from "firebase/database";
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,7 +16,7 @@ const firebaseApp = initializeApp(firebaseConfig);
 const db = getDatabase(firebaseApp);
 
 // ==== Verifikasi Webhook Meta ====
-app.get("/webhook", (req, res) => {
+app.get("/api/webhook", (req, res) => {
   const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
   const mode = req.query["hub.mode"];
   const token = req.query["hub.verify_token"];
@@ -31,7 +31,7 @@ app.get("/webhook", (req, res) => {
 });
 
 // ==== Terima pesan WhatsApp ====
-app.post("/webhook", async (req, res) => {
+app.post("/api/webhook", async (req, res) => {
   try {
     const change = req.body.entry?.[0]?.changes?.[0]?.value;
     const message = change?.messages?.[0];
@@ -66,12 +66,12 @@ async function handleDaftar(from, text, lokasi, maxAktif) {
   const noLambung = parts[2]?.toUpperCase();
 
   if (!noPolisi || !noLambung) {
-    return sendMessage(from, "❌ Format salah. Gunakan:\n#daftarantrian B1234XYZ KM1234");
+    return sendMessage(from, "❌ Format salah.\nGunakan:\n#daftarantrian B1234XYZ KM1234");
   }
 
   const snap = await get(ref(db, `pangkalan/${lokasi}/antrian`));
   const data = snap.val() || {};
-  const aktif = Object.values(data).filter(d => d.status === "aktif");
+  const aktif = Object.values(data).filter((d) => d.status === "aktif");
 
   const status = aktif.length >= maxAktif ? "buffer" : "aktif";
   await set(ref(db, `pangkalan/${lokasi}/antrian/${noPolisi}`), {
@@ -81,10 +81,16 @@ async function handleDaftar(from, text, lokasi, maxAktif) {
     createdAt: new Date().toISOString(),
   });
 
-  await sendMessage(from, `✅ Terdaftar di *${lokasi.replace("_", " ")}*\nStatus: *${status.toUpperCase()}*`);
+  await sendMessage(
+    from,
+    `✅ Terdaftar di *${lokasi.replace("_", " ")}*\nStatus: *${status.toUpperCase()}*`
+  );
 
   if (status === "buffer") {
-    await sendMessage(from, "🕒 Anda masuk daftar *buffer*. Kirim ShareLive agar admin tahu posisi Anda.");
+    await sendMessage(
+      from,
+      "🕒 Anda masuk daftar *buffer*. Kirim ShareLive agar admin tahu posisi Anda."
+    );
   }
 }
 
@@ -121,4 +127,5 @@ async function sendMessage(to, text) {
   });
 }
 
-app.listen(3000, () => console.log("🚀 Webhook berjalan di port 3000"));
+// ✅ Penting: ekspor express app, bukan listen()
+export default app;
