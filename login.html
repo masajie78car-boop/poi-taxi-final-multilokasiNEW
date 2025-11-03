@@ -12,13 +12,43 @@
     <p class="hint">Email default: masajie78car@gmail.com (panel Mall) / wijayaselalu8@gmail.com (Jatinegara)</p>
   </div>
 <script type="module">
-  const loginBtn = document.getElementById('loginBtn');
-  loginBtn.addEventListener('click', () => {
-    const email = document.getElementById('email').value.trim().toLowerCase();
-    if (email === 'masajie78car@gmail.com') { window.location.href = 'panel_admin.html'; }
-    else if (email === 'wijayaselalu8@gmail.com') { window.location.href = 'panel_admin_jatinegara.html'; }
-    else { window.location.href = 'panel_admin.html'; }
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyArjIuAyCRw85LStoiJzgIdLyhs8HXPFhs",
+    authDomain: "poi-taxi.firebaseapp.com",
+    databaseURL: "https://poi-taxi-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "poi-taxi",
+    storageBucket: "poitaxi.firebasestorage.app",
+    messagingSenderId: "774582687333",
+    appId: "1:774582687333:web:ee95e1e3e705beaee4d88c"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+
+  const openLogin = document.getElementById("openLogin");
+  const loginBox = document.getElementById("loginBox");
+  const loginBtn = document.getElementById("loginBtn");
+
+  openLogin.addEventListener("click", () => {
+    openLogin.style.display = "none";
+    loginBox.style.display = "block";
+  });
+
+  loginBtn.addEventListener("click", () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        if (email === "wijayaselalu8@gmail.com") {
+          window.location.href = "panel_admin_jatinegara.html";
+        } else {
+          window.location.href = "panel_admin.html";
+        }
+      })
+      .catch((error) => alert("Login gagal: " + error.message));
   });
 </script>
-</body>
-</html>
