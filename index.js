@@ -112,7 +112,7 @@ async function handleUpdate(from, lokasi) {
 // ==== Fungsi kirim pesan WhatsApp ====
 async function sendMessage(to, text) {
   const token = process.env.ACCESS_TOKEN;
-  const url = "https://graph.facebook.com/v17.0/917786831407342/messages";
+  const url = "https://graph.facebook.com/v17.0/252091901004238/messages";
   await fetch(url, {
     method: "POST",
     headers: {
@@ -127,5 +127,5 @@ async function sendMessage(to, text) {
   });
 }
 
-// ✅ Ekspor app untuk Vercel
+// ✅ Penting: ekspor express app, bukan listen()
 export default app;
