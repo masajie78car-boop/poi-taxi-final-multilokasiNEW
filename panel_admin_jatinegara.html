@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Panel Stasiun Jatinegara</title>
+</head>
+<body>
+  <h2>Panel Admin - Stasiun Jatinegara</h2>
+  <p>Menampilkan daftar antrian dari Firebase.</p>
+  <div id="data"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+    const firebaseConfig = {
+      databaseURL: "https://poi-taxi-default-rtdb.asia-southeast1.firebasedatabase.app/",
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    onValue(ref(db, "pangkalan/stasiun_jatinegara/antrian"), (snap) => {
+      const data = snap.val() || {};
+      const list = Object.values(data)
+        .map(d => `<p>${d.noPolisi} - ${d.noLambung} (${d.status})</p>`)
+        .join("");
+      document.getElementById("data").innerHTML = list;
+    });
+  </script>
+</body>
+</html>
