@@ -3,15 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>POI Taxi - Login</title>
+  <title>Mall Nusantara - Login</title>
   <style>
-    body { font-family: Arial; text-align: center; margin-top: 50px; }
-    button { padding: 10px 20px; font-size: 18px; background: green; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: url("https://github.com/masajie78car-boop/background-/blob/695e2543eb518e542925571ef6128ec5ca98e524/bg-picsay%20(1)-picsay.png?raw=true")
+        no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      justify-content: flex-end;
+      align-items: center;
+      font-family: "Poppins", sans-serif;
+    }
+
+    button {
+      margin-bottom: 40px;
+      padding: 16px 60px;
+      font-size: 1.2em;
+      background-color: rgba(0, 128, 255, 0.9);
+      border: none;
+      color: white;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 <body>
-  <h1>Selamat datang di POI Taxi Bot</h1>
-  <p>Silakan login untuk melanjutkan ke panel admin.</p>
-  <button onclick="window.location.href='/login.html'">LOGIN</button>
+  <button onclick="window.location.href='login.html'">LOGIN</button>
 </body>
 </html>

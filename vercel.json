@@ -8,10 +8,7 @@
     { "src": "panel_admin_jatinegara.html", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "^/api/webhook$", "dest": "index.js" },
-    { "src": "/login.html", "dest": "/login.html" },
-    { "src": "/panel_admin.html", "dest": "/panel_admin.html" },
-    { "src": "/panel_admin_jatinegara.html", "dest": "/panel_admin_jatinegara.html" },
+    { "src": "^/webhook$", "dest": "index.js" },
     { "src": "/(.*)", "dest": "/home.html" }
   ]
 }
