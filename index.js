@@ -11,26 +11,21 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 
 export default async function handler(req, res) {
-  // === VERIFIKASI DARI META ===
+  // === VERIFIKASI WEBHOOK META ===
   if (req.method === "GET") {
-  const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
-  const mode = req.query["hub.mode"];
-  const token = req.query["hub.verify_token"];
-  const challenge = req.query["hub.challenge"];
+    const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+    const mode = req.query["hub.mode"];
+    const token = req.query["hub.verify_token"];
+    const challenge = req.query["hub.challenge"];
 
-  console.log("🔍 Mode:", mode);
-  console.log("🔍 Token dari Meta:", token);
-  console.log("🔍 Token dari ENV:", VERIFY_TOKEN);
-
-  if (mode && token && mode === "subscribe" && token === VERIFY_TOKEN) {
-    console.log("✅ WEBHOOK VERIFIED");
-    res.status(200).send(challenge);
-  } else {
-    console.log("❌ TOKEN TIDAK SAMA / SALAH");
-    res.status(403).send("Verification failed");
+    if (mode && token && mode === "subscribe" && token === VERIFY_TOKEN) {
+      console.log("✅ WEBHOOK VERIFIED");
+      res.status(200).send(challenge);
+    } else {
+      res.status(403).send("Verification failed");
+    }
+    return;
   }
-  return;
-}
 
   // === TERIMA PESAN WA ===
   if (req.method === "POST") {
@@ -52,7 +47,7 @@ export default async function handler(req, res) {
       } else if (text.startsWith("#updatelist")) {
         await handleUpdate(from, "stasiun_jatinegara");
       } else {
-        await sendMessage(from, "⚠️ Format tidak dikenal.");
+        await sendMessage(from, "⚠️ Format tidak dikenal.\nGunakan:\n#daftarantrian B1234XYZ");
       }
 
       res.status(200).send("EVENT_RECEIVED");
@@ -65,13 +60,13 @@ export default async function handler(req, res) {
   }
 }
 
-// === DAFTAR ANTRIAN ===
+// === FUNGSI PENDAFTARAN ===
 async function handleDaftar(from, text, lokasi) {
   const parts = text.split(" ");
   const noPol = parts[1]?.toUpperCase();
 
   if (!noPol) {
-    return sendMessage(from, "❌ Format salah. Gunakan: #daftarantrian B1234XYZ");
+    return sendMessage(from, "❌ Format salah.\nGunakan: #daftarantrian B1234XYZ");
   }
 
   const snap = await get(ref(db, `pangkalan/${lokasi}/antrian`));
@@ -88,7 +83,7 @@ async function handleDaftar(from, text, lokasi) {
   await sendMessage(from, `✅ ${noPol} terdaftar di *${lokasi.replace("_", " ")}*\nStatus: ${status}`);
 }
 
-// === UPDATE ANTRIAN ===
+// === FUNGSI UPDATE ANTRIAN ===
 async function handleUpdate(from, lokasi) {
   const snap = await get(ref(db, `pangkalan/${lokasi}/antrian`));
   const data = snap.val() || {};
@@ -104,15 +99,15 @@ async function handleUpdate(from, lokasi) {
   await sendMessage(from, `📋 *Antrian ${lokasi.replace("_", " ")}:*\n${list}`);
 }
 
-// === KIRIM PESAN ===
+// === FUNGSI KIRIM PESAN ===
 async function sendMessage(to, text) {
   const token = process.env.ACCESS_TOKEN;
   const phoneId = process.env.PHONE_ID;
 
-  const response = await fetch(`https://graph.facebook.com/v19.0/${phoneId}/messages`, {
+  await fetch(`https://graph.facebook.com/v19.0/${phoneId}/messages`, {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -121,8 +116,4 @@ async function sendMessage(to, text) {
       text: { body: text },
     }),
   });
-
-  const data = await response.json();
-  console.log("Kirim pesan result:", data);
 }
-
