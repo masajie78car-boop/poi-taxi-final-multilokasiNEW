@@ -13,19 +13,24 @@ const db = getDatabase(app);
 export default async function handler(req, res) {
   // === VERIFIKASI DARI META ===
   if (req.method === "GET") {
-    const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
-    const mode = req.query["hub.mode"];
-    const token = req.query["hub.verify_token"];
-    const challenge = req.query["hub.challenge"];
+  const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
+  const mode = req.query["hub.mode"];
+  const token = req.query["hub.verify_token"];
+  const challenge = req.query["hub.challenge"];
 
-    if (mode && token && mode === "subscribe" && token === VERIFY_TOKEN) {
-      console.log("✅ WEBHOOK VERIFIED");
-      res.status(200).send(challenge);
-    } else {
-      res.status(403).send("Verification failed");
-    }
-    return;
+  console.log("🔍 Mode:", mode);
+  console.log("🔍 Token dari Meta:", token);
+  console.log("🔍 Token dari ENV:", VERIFY_TOKEN);
+
+  if (mode && token && mode === "subscribe" && token === VERIFY_TOKEN) {
+    console.log("✅ WEBHOOK VERIFIED");
+    res.status(200).send(challenge);
+  } else {
+    console.log("❌ TOKEN TIDAK SAMA / SALAH");
+    res.status(403).send("Verification failed");
   }
+  return;
+}
 
   // === TERIMA PESAN WA ===
   if (req.method === "POST") {
