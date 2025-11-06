@@ -109,7 +109,7 @@ async function sendMessage(to, text) {
   const token = process.env.ACCESS_TOKEN;
   const phoneId = process.env.PHONE_ID;
 
-  await fetch(`https://graph.facebook.com/v19.0/${phoneId}/messages`, {
+  const response = await fetch(`https://graph.facebook.com/v19.0/${phoneId}/messages`, {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`,
@@ -121,4 +121,8 @@ async function sendMessage(to, text) {
       text: { body: text },
     }),
   });
+
+  const data = await response.json();
+  console.log("Kirim pesan result:", data);
 }
+
