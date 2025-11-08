@@ -1,0 +1,9 @@
+<html><body><h1>Jatinegara Panel</h1>
+<script type="module">
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+const auth=getAuth();
+function doLogout(){ signOut(auth).then(()=>location.href='/login.html'); }
+window.doLogout=doLogout;
+</script>
+<button onclick="doLogout()">Logout</button>
+</body></html>
